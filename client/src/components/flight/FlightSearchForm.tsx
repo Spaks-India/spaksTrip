@@ -1,0 +1,438 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useMemo, useState, type ReactNode } from "react";
+import Checkbox from "@/components/ui/Checkbox";
+import Button from "@/components/ui/Button";
+import DateRangePicker, { type DateRange } from "@/components/ui/DateRangePicker";
+import { useFlightSearchStore, type FareCategory } from "@/state/flightSearchStore";
+import AirportField from "./AirportField";
+import PassengerSelector from "./PassengerSelector";
+import TripTypeTabs from "./TripTypeTabs";
+import { toIsoDate } from "@/lib/format";
+import { useToast } from "@/components/ui/Toast";
+import { cn } from "@/lib/cn";
+
+type Props = { variant?: "hero" | "inline" };
+
+type FareCategoryOption = {
+  value: FareCategory;
+  label: string;
+  description: string;
+  icon: ReactNode;
+};
+
+const FareIconProps = {
+  width: 22,
+  height: 22,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+};
+
+const FARE_CATEGORIES: FareCategoryOption[] = [
+  {
+    value: "regular",
+    label: "Regular",
+    description: "Best mix of value and flexibility",
+    icon: (
+      <svg {...FareIconProps}>
+        <rect x="3" y="7" width="18" height="13" rx="2" />
+        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <line x1="3" y1="13" x2="21" y2="13" />
+      </svg>
+    ),
+  },
+  {
+    value: "student",
+    label: "Student",
+    description: "Extra baggage & student benefits",
+    icon: (
+      <svg {...FareIconProps}>
+        <path d="M22 10 12 5 2 10l10 5 10-5z" />
+        <path d="M6 12v5a6 6 0 0 0 12 0v-5" />
+      </svg>
+    ),
+  },
+  {
+    value: "armed_forces",
+    label: "Armed Forces",
+    description: "Exclusive offers for forces",
+    icon: (
+      <svg {...FareIconProps}>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+  },
+  {
+    value: "senior_citizen",
+    label: "Senior Citizen",
+    description: "Special savings for seniors",
+    icon: (
+      <svg {...FareIconProps}>
+        <circle cx="12" cy="7" r="4" />
+        <path d="M5 22v-2a7 7 0 0 1 14 0v2" />
+      </svg>
+    ),
+  },
+];
+
+export default function FlightSearchForm({ variant = "hero" }: Props) {
+  const router = useRouter();
+  const toast = useToast();
+
+  const {
+    tripType,
+    legs,
+    returnDate,
+    cabin,
+    pax,
+    directOnly,
+    fareCategory,
+    setTripType,
+    setLeg,
+    addLeg,
+    removeLeg,
+    swapLeg,
+    setReturnDate,
+    setCabin,
+    setPax,
+    setDirectOnly,
+    setFareCategory,
+    pushRecent,
+  } = useFlightSearchStore();
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const primaryLeg = legs[0];
+  const returnRange: DateRange = useMemo(
+    () => ({
+      from: primaryLeg.date ? new Date(primaryLeg.date) : null,
+      to: returnDate ? new Date(returnDate) : null,
+    }),
+    [primaryLeg.date, returnDate],
+  );
+
+  const onSearch = () => {
+    if (!primaryLeg.from || !primaryLeg.to) {
+      toast.push({ title: "Add origin and destination", tone: "warn" });
+      return;
+    }
+    if (primaryLeg.from.code === primaryLeg.to.code) {
+      toast.push({ title: "Origin and destination can't be the same", tone: "warn" });
+      return;
+    }
+    if (!primaryLeg.date) {
+      toast.push({ title: "Pick a departure date", tone: "warn" });
+      return;
+    }
+    if (tripType === "ROUND" && !returnDate) {
+      toast.push({ title: "Pick a return date", tone: "warn" });
+      return;
+    }
+
+    setSubmitting(true);
+    const params = new URLSearchParams({
+      from: primaryLeg.from.code,
+      to: primaryLeg.to.code,
+      depart: primaryLeg.date,
+      cabin,
+      adults: String(pax.adults),
+      children: String(pax.children),
+      infants: String(pax.infants),
+      trip: tripType,
+      direct: directOnly ? "1" : "0",
+      fareCategory,
+    });
+    if (tripType === "ROUND" && returnDate) params.set("return", returnDate);
+    if (tripType === "MULTI" && legs[1]?.from && legs[1]?.to && legs[1]?.date) {
+      params.set("from2", legs[1].from.code);
+      params.set("to2", legs[1].to.code);
+      params.set("depart2", legs[1].date);
+    }
+
+    pushRecent({
+      id: `${primaryLeg.from.code}-${primaryLeg.to.code}-${primaryLeg.date}`,
+      label: `${primaryLeg.from.city} → ${primaryLeg.to.city}`,
+      when: new Date().toISOString(),
+      from: primaryLeg.from.code,
+      to: primaryLeg.to.code,
+      date: primaryLeg.date,
+    });
+
+    router.push(`/flight/results?${params.toString()}`);
+  };
+
+  const isHero = variant === "hero";
+
+  return (
+    <div
+      className={
+        isHero
+          ? "rounded-2xl bg-white p-5 shadow-(--shadow-lg) md:p-6"
+          : "rounded-xl bg-white p-4 shadow-(--shadow-sm) border border-border-soft"
+      }
+    >
+      {/* Row 1: Trip type + Non-stop */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <TripTypeTabs value={tripType} onChange={setTripType} />
+        <div className="flex items-center gap-4">
+          <Checkbox
+            id="direct-only"
+            label="Non-stop"
+            checked={directOnly}
+            onChange={(e) => setDirectOnly(e.target.checked)}
+          />
+        </div>
+      </div>
+
+      {tripType !== "MULTI" ? (
+        <div className="mt-4 grid gap-2 lg:grid-cols-[1fr_auto_1fr_1.5fr_1fr]">
+          <AirportField
+            label="From"
+            value={primaryLeg.from}
+            onChange={(a) => setLeg(0, { from: a })}
+          />
+          <button
+            type="button"
+            aria-label="Swap origin and destination"
+            onClick={() => swapLeg(0)}
+            className="self-end mb-0.75 grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-ink-soft hover:border-brand-500 hover:text-brand-600 transition-colors"
+          >
+            <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <polyline points="16 3 21 8 16 13" />
+              <line x1="21" y1="8" x2="4" y2="8" />
+              <polyline points="8 21 3 16 8 11" />
+              <line x1="3" y1="16" x2="20" y2="16" />
+            </svg>
+          </button>
+          <AirportField
+            label="To"
+            value={primaryLeg.to}
+            onChange={(a) => setLeg(0, { to: a })}
+          />
+          <div className="flex flex-col gap-1">
+            <span className="text-[12px] font-medium text-ink-muted">
+              {tripType === "ROUND" ? "Depart — Return" : "Departure"}
+            </span>
+            <DateRangePicker
+              mode={tripType === "ROUND" ? "range" : "single"}
+              value={returnRange}
+              onChange={(v) => {
+                setLeg(0, { date: v.from ? toIsoDate(v.from) : null });
+                setReturnDate(v.to ? toIsoDate(v.to) : null);
+              }}
+            />
+          </div>
+          <PassengerSelector
+            pax={pax}
+            cabin={cabin}
+            onPaxChange={setPax}
+            onCabinChange={setCabin}
+          />
+        </div>
+      ) : (
+        <div className="mt-4 flex flex-col gap-3">
+          {legs.map((leg, i) => (
+            <div key={i} className="grid gap-2 lg:grid-cols-[1fr_auto_1fr_1fr_auto]">
+              <AirportField
+                label={`From (${i + 1})`}
+                value={leg.from}
+                onChange={(a) => setLeg(i, { from: a })}
+              />
+              <button
+                type="button"
+                aria-label="Swap"
+                onClick={() => swapLeg(i)}
+                className="self-end mb-0.75 grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-ink-soft hover:border-brand-500 hover:text-brand-600"
+              >
+                <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden>
+                  <polyline points="16 3 21 8 16 13" />
+                  <line x1="21" y1="8" x2="4" y2="8" />
+                  <polyline points="8 21 3 16 8 11" />
+                  <line x1="3" y1="16" x2="20" y2="16" />
+                </svg>
+              </button>
+              <AirportField
+                label={`To (${i + 1})`}
+                value={leg.to}
+                onChange={(a) => setLeg(i, { to: a })}
+              />
+              <div className="flex flex-col gap-1">
+                <span className="text-[12px] font-medium text-ink-muted">Departure</span>
+                <DateRangePicker
+                  mode="single"
+                  value={{ from: leg.date ? new Date(leg.date) : null, to: null }}
+                  onChange={(v) => setLeg(i, { date: v.from ? toIsoDate(v.from) : null })}
+                  labelFrom="Departure"
+                  placeholderFrom="Pick date"
+                />
+              </div>
+              <div className="flex items-end gap-2">
+                {legs.length > 2 && (
+                  <button
+                    type="button"
+                    onClick={() => removeLeg(i)}
+                    aria-label="Remove leg"
+                    className="h-11 px-3 rounded-md border border-border text-ink-soft hover:bg-danger-50 hover:text-danger-600"
+                  >
+                    <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-2 14H7L5 6" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addLeg}
+              disabled={legs.length >= 5}
+              leading={
+                <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden>
+                  <line x1={12} y1={5} x2={12} y2={19} />
+                  <line x1={5} y1={12} x2={19} y2={12} />
+                </svg>
+              }
+            >
+              Add another flight
+            </Button>
+            <PassengerSelector
+              pax={pax}
+              cabin={cabin}
+              onPaxChange={setPax}
+              onCabinChange={setCabin}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Row 3: Fare type cards */}
+      <div className="mt-4">
+        <span className="text-[11px] font-semibold text-ink-muted uppercase tracking-wide">
+          Fare Type
+        </span>
+        <div className="mt-2 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {FARE_CATEGORIES.map((cat) => {
+            const active = fareCategory === cat.value;
+            return (
+              <button
+                key={cat.value}
+                type="button"
+                onClick={() => setFareCategory(cat.value)}
+                aria-pressed={active}
+                className={cn(
+                  "relative flex items-center gap-3 rounded-xl border p-3 text-left transition-colors",
+                  active
+                    ? "border-brand-500 bg-brand-50/40"
+                    : "border-border-soft bg-white hover:border-brand-300",
+                )}
+              >
+                <span
+                  className={cn(
+                    "grid h-11 w-11 shrink-0 place-items-center rounded-full",
+                    active ? "bg-brand-500 text-white" : "bg-surface-muted text-ink-muted",
+                  )}
+                  aria-hidden
+                >
+                  {cat.icon}
+                </span>
+                <div className="min-w-0 flex-1 pr-6">
+                  <div className="text-[14px] font-semibold text-ink leading-tight">
+                    {cat.label}
+                  </div>
+                  <div className="mt-0.5 text-[12px] text-ink-muted leading-snug">
+                    {cat.description}
+                  </div>
+                </div>
+                <span
+                  className={cn(
+                    "absolute top-2.5 right-2.5 grid h-5 w-5 place-items-center rounded-full border transition-colors",
+                    active
+                      ? "border-brand-500 bg-brand-500 text-white"
+                      : "border-border bg-white",
+                  )}
+                  aria-hidden
+                >
+                  {active && (
+                    <svg
+                      viewBox="0 0 24 24"
+                      width={12}
+                      height={12}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between gap-3">
+        <PopularRoutes />
+        <Button
+          onClick={onSearch}
+          loading={submitting}
+          size="xl"
+          variant="accent"
+          className="min-w-45"
+          leading={
+            <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          }
+        >
+          Search Flights
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const POPULAR: Array<{ from: string; to: string; label: string }> = [
+  { from: "DEL", to: "BOM", label: "Delhi → Mumbai" },
+  { from: "BLR", to: "GOI", label: "Bengaluru → Goa" },
+  { from: "BOM", to: "DXB", label: "Mumbai → Dubai" },
+  { from: "DEL", to: "LHR", label: "Delhi → London" },
+];
+
+function PopularRoutes() {
+  const { setLeg } = useFlightSearchStore();
+  return (
+    <div className="hidden md:flex items-center gap-2 overflow-hidden">
+      <span className="text-[12px] font-medium text-ink-muted">Popular:</span>
+      <div className="flex items-center gap-2 flex-wrap">
+        {POPULAR.map((r) => (
+          <button
+            key={`${r.from}-${r.to}`}
+            type="button"
+            onClick={() => {
+              import("@/lib/mock/airports").then(({ getAirport }) => {
+                setLeg(0, { from: getAirport(r.from), to: getAirport(r.to) });
+              });
+            }}
+            className="text-[12px] font-medium text-brand-700 hover:text-brand-800 hover:underline"
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}

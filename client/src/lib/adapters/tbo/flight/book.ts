@@ -1,0 +1,218 @@
+import "server-only";
+import { withRetry, tboBase, tboApiUrl } from "../auth";
+import { assertTboSuccess, TboFareExpiredError, TboBookingFailedError } from "../errors";
+import { getTrace } from "../traceCache";
+import { logRequest, logResponse, logError } from "../log";
+import type { TboFlightBookResponse, TboPassengerRequest, TboFare, TboFareBreakdown } from "../types";
+
+// ─── Input types ──────────────────────────────────────────────────────────────
+
+export interface BookingPassenger {
+  type: "ADT" | "CHD" | "INF";
+  title: string;               // "Mr" | "Mrs" | "Ms" | "Mstr" | "Miss"
+  firstName: string;
+  lastName: string;
+  gender: "M" | "F";
+  dob: string;                 // "YYYY-MM-DD"
+  addressLine1: string;        // required — sampleverification.html rule 5
+  city: string;                // required — sampleverification.html rule 5
+  countryCode?: string;        // ISO-2, defaults "IN"
+  countryName?: string;        // defaults "India"
+  passport?: string;
+  passportExpiry?: string;     // "YYYY-MM-DD"
+  nationality?: string;        // ISO-2, defaults "IN"
+  email?: string;
+  phone?: string;
+  meal?: string;
+  seat?: string;
+}
+
+export interface TboBookFlightInput {
+  resultIndex: string;
+  /** Explicit TraceId from FareQuote — required in serverless deployments where
+   *  the in-process traceCache may not survive across request boundaries. */
+  traceId?: string;
+  /** FareBreakdown array from the FareQuote response.
+   *  Each passenger's Fare node is derived by dividing the aggregate per pax type
+   *  by PassengerCount — per TBO certification requirement (general.html §10). */
+  fareBreakdown: TboFareBreakdown[];
+  passengers: BookingPassenger[];
+  contactEmail: string;
+  contactPhone: string;
+  contactCountryCode?: string;
+  mealCodes?: string[];
+  seatCodes?: string[];
+}
+
+export interface TboBookFlightOutput {
+  bookingId: number;
+  pnr: string;
+  isPriceChanged: boolean;
+}
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const PAX_TYPE: Record<"ADT" | "CHD" | "INF", number> = { ADT: 1, CHD: 2, INF: 3 };
+const GENDER: Record<"M" | "F", number> = { M: 1, F: 2 };
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function dobToTbo(dob: string): string {
+  return dob.includes("T") ? dob : `${dob}T00:00:00`;
+}
+
+/**
+ * Builds a per-passenger TboFare by dividing the FareBreakdown aggregate by
+ * PassengerCount for the given PaxType.
+ *
+ * Formula (general.html §10):
+ *   per-pax BaseFare = FareBreakdown[paxType].BaseFare / PassengerCount
+ *   per-pax Tax      = FareBreakdown[paxType].Tax      / PassengerCount
+ *   per-pax YQTax    = FareBreakdown[paxType].YQTax    / PassengerCount
+ *
+ * Exported so tboLccTicket can reuse it without duplicating logic.
+ */
+export function buildPassengerFare(
+  fareBreakdown: TboFareBreakdown[],
+  paxType: number,
+): TboFare {
+  const bd = fareBreakdown.find((b) => b.PassengerType === paxType);
+  if (!bd) {
+    return {
+      Currency: "INR", BaseFare: 0, Tax: 0, TaxBreakup: [], YQTax: 0,
+      AdditionalTxnFeeOfrd: 0, AdditionalTxnFeePub: 0, PGCharge: 0,
+      OtherCharges: 0, ChargeBU: [], Discount: 0, PublishedFare: 0,
+      CommissionEarned: 0, PLBEarned: 0, IncentiveEarned: 0, OfferedFare: 0,
+      TdsOnCommission: 0, TdsOnPLB: 0, TdsOnIncentive: 0, ServiceFee: 0,
+      // PGCharge is not in FareBreakdown; TboFare zero-fills it
+    };
+  }
+  const n = Math.max(1, bd.PassengerCount);
+  return {
+    Currency: bd.Currency ?? "INR",
+    BaseFare: bd.BaseFare / n,
+    Tax: bd.Tax / n,
+    TaxBreakup: [],
+    YQTax: bd.YQTax / n,
+    AdditionalTxnFeeOfrd: (bd.AdditionalTxnFeeOfrd ?? 0) / n,
+    AdditionalTxnFeePub: (bd.AdditionalTxnFeePub ?? 0) / n,
+    PGCharge: 0,
+    OtherCharges: 0,
+    ChargeBU: [],
+    Discount: 0,
+    PublishedFare: 0,
+    CommissionEarned: 0,
+    PLBEarned: 0,
+    IncentiveEarned: 0,
+    OfferedFare: 0,
+    TdsOnCommission: 0,
+    TdsOnPLB: 0,
+    TdsOnIncentive: 0,
+    ServiceFee: 0,
+  };
+}
+
+/**
+ * Maps a BookingPassenger to the TBO wire format.
+ * Exported so tboLccTicket can reuse the same passenger-building logic.
+ * Caller is responsible for setting Email and ContactNo on the lead passenger.
+ */
+export function mapPassenger(
+  p: BookingPassenger,
+  isLead: boolean,
+  fareBreakdown: TboFareBreakdown[],
+): TboPassengerRequest {
+  return {
+    Title: p.title,
+    FirstName: p.firstName,
+    LastName: p.lastName,
+    PaxType: PAX_TYPE[p.type],
+    DateOfBirth: dobToTbo(p.dob),
+    Gender: GENDER[p.gender],
+    PassportNo: p.passport ?? "",
+    PassportExpiry: p.passportExpiry ? dobToTbo(p.passportExpiry) : "2030-01-01T00:00:00",
+    AddressLine1: p.addressLine1,
+    City: p.city,
+    CountryCode: p.countryCode ?? "IN",
+    CountryName: p.countryName ?? "India",
+    Nationality: p.nationality ?? "IN",
+    ContactNo: "",   // populated by caller for lead pax
+    Email: "",       // populated by caller for lead pax
+    IsLeadPax: isLead,
+    GSTCompanyAddress: "",
+    GSTCompanyContactNumber: "",
+    GSTCompanyName: "",
+    GSTNumber: "",
+    GSTCompanyEmail: "",
+    Fare: buildPassengerFare(fareBreakdown, PAX_TYPE[p.type]),
+    Baggage: [],
+    MealDynamic: [],
+    SeatDynamic: [],
+  };
+}
+
+// ─── Public ───────────────────────────────────────────────────────────────────
+
+export async function tboBookFlight(input: TboBookFlightInput): Promise<TboBookFlightOutput> {
+  const traceId = input.traceId ?? getTrace(input.resultIndex);
+  if (!traceId) throw new TboFareExpiredError();
+
+  const doBook = async (token: string): Promise<TboBookFlightOutput> => {
+    const passengers: TboPassengerRequest[] = input.passengers.map((p, i) => {
+      const mapped = mapPassenger(p, i === 0, input.fareBreakdown);
+      if (i === 0) {
+        mapped.Email = input.contactEmail;
+        mapped.ContactNo = input.contactPhone;
+      }
+      return mapped;
+    });
+
+    const url = tboApiUrl("BookingEngineService_Air/AirService.svc/rest/Book");
+    const reqBody = {
+      ...tboBase(token),
+      ResultIndex: input.resultIndex,
+      TraceId: traceId,
+      Passengers: passengers,
+    };
+    logRequest("Flight Book", url, { ...reqBody, TokenId: "***" });
+
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reqBody),
+      });
+    } catch (err) {
+      logError("Flight Book", err);
+      throw err;
+    }
+
+    const text = await res.text();
+    let data: TboFlightBookResponse;
+    try { data = JSON.parse(text); }
+    catch { throw new Error(`TBO Book non-JSON (HTTP ${res.status}): ${text.slice(0, 200)}`); }
+
+    logResponse("Flight Book", res.status, data);
+    if (!res.ok) throw new Error(`TBO Book HTTP ${res.status}`);
+    assertTboSuccess(data.Response?.Error);
+
+    const itinerary = data.Response?.FlightItinerary;
+    if (!itinerary?.BookingId) throw new TboBookingFailedError("No BookingId returned");
+
+    return {
+      bookingId: itinerary.BookingId,
+      pnr: itinerary.PNR ?? "",
+      isPriceChanged: itinerary.IsPriceChanged ?? false,
+    };
+  };
+
+  try {
+    return await withRetry(doBook);
+  } catch (err) {
+    if (err instanceof TboBookingFailedError) {
+      return withRetry(doBook);
+    }
+    throw err;
+  }
+}
