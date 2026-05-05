@@ -62,15 +62,24 @@ export default function DateRangePicker({
 
   // Compute viewport-relative coords for the fixed-position portal panel.
   const computeCoords = useCallback((): Coords | null => {
-    const el = rootRef.current;
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    // Clamp left so the panel stays on-screen (panel is up to 640px wide).
-    const panelW = Math.min(640, window.innerWidth - 16);
-    const rawLeft = r.left;
-    const left = Math.max(8, Math.min(rawLeft, window.innerWidth - panelW - 8));
-    return { top: r.bottom + 6, left };
-  }, []);
+  const el = rootRef.current;
+  if (!el) return null;
+
+  const r = el.getBoundingClientRect();
+
+  const panelW = Math.min(640, window.innerWidth - 16);
+  const left = Math.max(8, Math.min(r.left, window.innerWidth - panelW - 8));
+
+  const panelHeight = 420;
+  const spaceBelow = window.innerHeight - r.bottom;
+
+  const openUp = spaceBelow < panelHeight;
+
+  return {
+    top: openUp ? r.top - panelHeight - 6 : r.bottom + 6,
+    left,
+  };
+}, []);
 
   useEffect(() => {
     if (!open) return;
