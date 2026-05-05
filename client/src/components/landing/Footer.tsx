@@ -32,7 +32,7 @@ export default function Footer() {
           <FooterColumn
             title={t("footer.important_links")}
             links={[
-              { label: t("footer.privacy_policy"), href: "#" },
+              { label: t("footer.privacy_policy"), href: "/privacy_policy" },
               { label: t("footer.terms_conditions"), href: "#" },
               { label: t("footer.refund_policy"), href: "#" },
             ]}
