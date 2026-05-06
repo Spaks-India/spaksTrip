@@ -232,15 +232,18 @@ export default function Header() {
           ref={utilityBarRef}
           className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6"
         >
-          <a
-            href="tel:+919220328072"
-            className="flex items-center gap-2 text-white/85 transition-colors hover:text-white"
-          >
-            <svg viewBox="0 0 24 24" width={14} height={14} fill="currentColor" aria-hidden>
-              <path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.5c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 1.7z" />
-            </svg>
-            +91 922 032 8072
-          </a>
+          <div className="flex items-center gap-4">
+            <Logo />
+            <a
+              href="tel:+919220328072"
+              className="flex items-center gap-2 text-white/85 transition-colors hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" width={14} height={14} fill="currentColor" aria-hidden>
+                <path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.5c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 1.7z" />
+              </svg>
+              +91 922 032 8072
+            </a>
+          </div>
 
           <div className="hidden items-center gap-3 sm:flex">
             <div className="flex items-center gap-3 border-r border-white/20 pr-3">
@@ -349,7 +352,6 @@ export default function Header() {
               "rounded-[22px] border border-border-soft bg-white/95 shadow-[0_14px_36px_rgba(15,23,42,0.12)] supports-[backdrop-filter]:bg-white/85",
           )}
         >
-          <Logo />
           {/* CHANGE: centered alignment within the grid */}
           <nav className="hidden lg:block justify-self-center">
             <ul className="flex items-center gap-7 text-[14px] font-semibold text-ink">
