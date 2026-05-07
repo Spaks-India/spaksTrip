@@ -4,6 +4,15 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { City } from "@/lib/mock/hotels";
 
+export type Destination =
+  | {
+      kind: "country";
+      code: string;
+      name: string;
+      city?: { code: string; name: string };
+    }
+  | { kind: "postal"; postalCode: string };
+
 type RecentHotelSearch = {
   id: string;
   label: string;
@@ -13,6 +22,7 @@ type RecentHotelSearch = {
 
 type State = {
   city: City | null;
+  destination: Destination | null;
   checkIn: string | null;
   checkOut: string | null;
   rooms: number;
@@ -23,6 +33,7 @@ type State = {
 
 type Actions = {
   setCity: (c: City | null) => void;
+  setDestination: (d: Destination | null) => void;
   setCheckIn: (d: string | null) => void;
   setCheckOut: (d: string | null) => void;
   setRooms: (n: number) => void;
@@ -34,6 +45,7 @@ type Actions = {
 
 const initial: State = {
   city: null,
+  destination: null,
   checkIn: null,
   checkOut: null,
   rooms: 1,
@@ -47,6 +59,7 @@ export const useHotelSearchStore = create<State & Actions>()(
     (set, get) => ({
       ...initial,
       setCity: (city) => set({ city }),
+      setDestination: (destination) => set({ destination }),
       setCheckIn: (checkIn) => set({ checkIn }),
       setCheckOut: (checkOut) => set({ checkOut }),
       setRooms: (rooms) => set({ rooms }),
