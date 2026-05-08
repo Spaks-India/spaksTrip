@@ -19,11 +19,50 @@ function loadCities(countryCode: string): Promise<City[]> {
   const inflight = citiesPromises.get(key);
   if (inflight) return inflight;
   const p = fetch(`/api/hotels/cities?country=${encodeURIComponent(key)}`)
-    .then((r) => r.json() as Promise<CitiesResponse>)
+    .then(async (r) => {
+      // Treat 404 (no cities for country) as an empty result, not an error.
+      if (r.status === 404) {
+        const empty: City[] = [];
+        citiesCache.set(key, empty);
+        return { __handled: true, cities: empty } as const;
+      }
+      if (!r.ok) {
+        throw new Error(`HTTP ${r.status}: Failed to fetch cities`);
+      }
+      return (await r.json()) as CitiesResponse;
+    })
     .then((j) => {
-      if (!j.success) throw new Error(j.error);
-      citiesCache.set(key, j.data.cities);
-      return j.data.cities;
+      console.log(`[CitySelector] API response for ${key}:`, j);
+
+      if (j && typeof j === 'object' && '__handled' in j) {
+        return j.cities;
+      }
+
+      if (!j || typeof j !== 'object') {
+        throw new Error('Invalid response: expected object');
+      }
+
+      if ('success' in j && !j.success) {
+        throw new Error(j.error || 'Unknown error from API');
+      }
+
+      if (!('data' in j) || !j.data || !Array.isArray(j.data.cities)) {
+        console.warn(`[CitySelector] Unexpected response structure for ${key}:`, j);
+        throw new Error('Invalid response: expected data.cities array');
+      }
+      
+      const cities = j.data.cities.filter((c): c is City => {
+        return c && typeof c === 'object' && 'Code' in c && 'Name' in c && 
+               typeof c.Code === 'string' && typeof c.Name === 'string';
+      });
+      
+      console.log(`[CitySelector] Filtered ${cities.length} valid cities for ${key}`);
+      citiesCache.set(key, cities);
+      return cities;
+    })
+    .catch((error) => {
+      console.error(`[CitySelector] Error loading cities for ${key}:`, error);
+      throw error;
     })
     .finally(() => {
       citiesPromises.delete(key);
@@ -47,33 +86,59 @@ export default function CitySelector({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [cities, setCities] = useState<City[]>(
-    countryCode ? (citiesCache.get(countryCode) ?? []) : [],
-  );
+  const [cities, setCities] = useState<City[]>(() => {
+    if (!countryCode) return [];
+    const cached = citiesCache.get(countryCode.toUpperCase());
+    return Array.isArray(cached) ? cached : [];
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedCity || cities.length === 0) return;
+    const exists = cities.some(
+      (c) => String(c?.Code ?? "").toUpperCase() === selectedCity.code.toUpperCase(),
+    );
+    if (!exists) {
+      console.warn(
+        `[CitySelector] Selected city ${selectedCity.code} not in option list — clearing.`,
+      );
+      onChange(null);
+    }
+  }, [cities, selectedCity, onChange]);
 
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    setQuery("");
     if (!countryCode) {
       setCities([]);
       setError(null);
       return;
     }
-    const cached = citiesCache.get(countryCode);
-    if (cached) {
+    const key = countryCode.toUpperCase();
+    const cached = citiesCache.get(key);
+    if (cached && Array.isArray(cached)) {
+      console.log(`[CitySelector] Using cached cities for ${key}`);
       setCities(cached);
+      setError(null);
       return;
     }
     setLoading(true);
     setError(null);
     loadCities(countryCode)
-      .then((list) => setCities(list))
-      .catch((e) =>
-        setError(e instanceof Error ? e.message : "Failed to load cities"),
-      )
+      .then((list) => {
+        const safeList = Array.isArray(list) ? list : [];
+        console.log(`[CitySelector] Loaded ${safeList.length} cities for ${key}`, safeList.slice(0, 3));
+        setCities(safeList);
+        setError(null);
+      })
+      .catch((e) => {
+        console.error(`[CitySelector] Caught error loading cities:`, e);
+        setCities([]);
+        setError("Cities unavailable right now");
+      })
       .finally(() => setLoading(false));
   }, [countryCode]);
 
@@ -92,16 +157,25 @@ export default function CitySelector({
   }, [open]);
 
   const filteredCities = useMemo(() => {
+    const safeCities = Array.isArray(cities) ? cities : [];
+    const valid = safeCities.filter(
+      (c): c is City =>
+        !!c &&
+        typeof c === "object" &&
+        typeof c.Code === "string" &&
+        typeof c.Name === "string",
+    );
     const q = query.trim().toLowerCase();
-    if (!q) return cities;
-    return cities.filter(
+    if (!q) return valid;
+    return valid.filter(
       (c) =>
-        c.Name.toLowerCase().includes(q) || c.Code.toLowerCase().includes(q),
+        (c.Name?.toLowerCase().includes(q) ?? false) ||
+        (c.Code?.toLowerCase().includes(q) ?? false),
     );
   }, [cities, query]);
 
-  const buttonText = selectedCity ? selectedCity.name : "Select city";
-  const buttonSub = selectedCity ? `City code ${selectedCity.code}` : "Optional";
+  const buttonText = selectedCity?.name ?? "Select city";
+  const buttonSub = selectedCity?.code ? `City code ${selectedCity.code}` : "Optional";
 
   const isDisabled = !countryCode;
 
@@ -110,8 +184,11 @@ export default function CitySelector({
       <span className="text-[12px] font-medium text-ink-muted">City</span>
       <button
         type="button"
-        disabled={isDisabled}
-        onClick={() => !isDisabled && setOpen((o) => !o)}
+        onClick={() => {
+          if (!isDisabled) {
+            setOpen((o) => !o);
+          }
+        }}
         aria-expanded={open}
         className={cn(
           "flex w-full items-center justify-between gap-2 rounded-xl border bg-white px-3 py-2.5 text-left transition-colors",
@@ -206,24 +283,35 @@ export default function CitySelector({
                   Loading cities…
                 </li>
               ) : error ? (
-                <li className="px-3 py-2 text-[12px] text-red-600">
-                  {error}
+                <li className="px-3 py-2 text-[12px] text-ink-soft">
+                  {error}. You can still continue without selecting a city.
                 </li>
               ) : filteredCities.length === 0 ? (
                 <li className="px-3 py-2 text-[12px] text-ink-soft">
-                  {cities.length === 0
+                  {(cities?.length ?? 0) === 0
                     ? "No cities available"
                     : `No matches for "${query}"`}
                 </li>
               ) : (
-                filteredCities.slice(0, 250).map((c) => {
-                  const isSelected = selectedCity?.code === c.Code;
+                filteredCities.slice(0, 250).map((c, idx) => {
+                  if (!c || typeof c !== 'object' || !c.Code || !c.Name) {
+                    return null;
+                  }
+                  // Normalize comparison: both should be uppercase strings
+                  const normalizedSelectedCode = selectedCity?.code?.toUpperCase() ?? '';
+                  const normalizedCityCode = String(c.Code).toUpperCase();
+                  const isSelected = normalizedSelectedCode && normalizedSelectedCode === normalizedCityCode;
+                  
                   return (
-                    <li key={c.Code + c.Name}>
+                    <li key={`${c.Code}-${c.Name}-${idx}`}>
                       <button
                         type="button"
                         onClick={() => {
-                          onChange({ code: c.Code, name: c.Name });
+                          // Store in lowercase to match component's expected format
+                          const cityCode = String(c.Code).toUpperCase();
+                          const cityName = String(c.Name);
+                          console.log(`[CitySelector] Selected city: ${cityCode} - ${cityName}`);
+                          onChange({ code: cityCode, name: cityName });
                           setOpen(false);
                         }}
                         className={cn(
