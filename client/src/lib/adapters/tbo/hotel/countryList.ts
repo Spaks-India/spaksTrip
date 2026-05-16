@@ -23,7 +23,7 @@ interface TboCountryListResponse {
 
 const COUNTRY_LIST_URL =
   process.env.TBO_HOLIDAYS_HOTEL_API_URL?.replace(/\/$/, "") ??
-  "http://api.tbotechnology.in/TBOHolidays_HotelAPI";
+  "https://api.tbotechnology.in/TBOHolidays_HotelAPI";
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 let cache: { fetchedAt: number; countries: TboCountry[] } | null = null;
