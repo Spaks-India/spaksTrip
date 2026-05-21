@@ -296,7 +296,9 @@ const DETAIL_STATUS_BY_CODE: Partial<Record<number, BookingDetailStatus>> = {
 };
 
 function mapStatus(raw: string | undefined, code: number | undefined): BookingDetailStatus {
-  return (raw && DETAIL_STATUS_BY_NAME[raw]) ?? (code !== undefined && DETAIL_STATUS_BY_CODE[code]) ?? "Unknown";
+  const statusFromName = raw ? DETAIL_STATUS_BY_NAME[raw] : undefined;
+  const statusFromCode = code !== undefined ? DETAIL_STATUS_BY_CODE[code] : undefined;
+  return statusFromName ?? statusFromCode ?? "Unknown";
 }
 
 function mapPassengers(raw: TboPassenger[] | undefined): BookingPassenger[] {

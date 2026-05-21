@@ -115,7 +115,9 @@ const STATUS_BY_CODE: Partial<Record<number, HotelBookStatus>> = {
 };
 
 function mapBookingStatus(raw: string | undefined, code: number | undefined): HotelBookStatus {
-  return (raw && STATUS_BY_NAME[raw]) ?? (code !== undefined && STATUS_BY_CODE[code]) ?? "Unknown";
+  const statusFromName = raw ? STATUS_BY_NAME[raw] : undefined;
+  const statusFromCode = code !== undefined ? STATUS_BY_CODE[code] : undefined;
+  return statusFromName ?? statusFromCode ?? "Unknown";
 }
 
 // ─── Public function ──────────────────────────────────────────────────────────
