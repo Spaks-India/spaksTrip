@@ -5,6 +5,7 @@ import {
   useId,
   useRef,
   useState,
+  type PointerEvent,
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/cn";
@@ -59,18 +60,29 @@ export default function Combobox({
 
   useEffect(() => {
     if (!open) return;
-    if (query.length < minQuery) {
-      setOpts([]);
-      return;
-    }
     let cancelled = false;
-    setBusy(true);
-    Promise.resolve(search(query)).then((result) => {
-      if (cancelled) return;
-      setOpts(result);
-      setHover(0);
-      setBusy(false);
-    });
+    if (query.length < minQuery) {
+      Promise.resolve().then(() => {
+        if (cancelled) return;
+        setOpts([]);
+        setBusy(false);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+    Promise.resolve()
+      .then(() => {
+        if (cancelled) return [];
+        setBusy(true);
+        return search(query);
+      })
+      .then((result) => {
+        if (cancelled) return;
+        setOpts(result);
+        setHover(0);
+        setBusy(false);
+      });
     return () => {
       cancelled = true;
     };
@@ -88,7 +100,16 @@ export default function Combobox({
     onChange(o);
     setOpen(false);
     setQuery("");
-    inputRef.current?.blur();
+  };
+
+  const openAndFocus = () => {
+    setOpen(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const handleControlPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    openAndFocus();
   };
 
   const grouped = (() => {
@@ -111,8 +132,9 @@ export default function Combobox({
         </label>
       ) : null}
       <div
+        onPointerDownCapture={handleControlPointerDown}
         className={cn(
-          "flex items-center gap-2 rounded-md bg-white border border-border px-3 h-11 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20",
+          "flex cursor-text items-center gap-2 rounded-md bg-white border border-border px-3 h-11 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20",
           inputClassName,
         )}
       >
@@ -120,11 +142,8 @@ export default function Combobox({
         {value && !open ? (
           <button
             type="button"
-            onClick={() => {
-              setOpen(true);
-              setTimeout(() => inputRef.current?.focus(), 0);
-            }}
-            className="flex-1 min-w-0 text-left"
+            onClick={openAndFocus}
+            className="flex h-full w-full flex-1 min-w-0 items-center text-left"
           >
             {renderValue ? (
               renderValue(value)
@@ -168,7 +187,7 @@ export default function Combobox({
               if (e.key === "Escape") setOpen(false);
             }}
             placeholder={placeholder}
-            className="flex-1 min-w-0 bg-transparent outline-none text-[14px] text-ink placeholder:text-ink-subtle"
+            className="h-full w-full flex-1 min-w-0 bg-transparent outline-none text-[14px] text-ink placeholder:text-ink-subtle"
           />
         )}
         {value && (
