@@ -3,9 +3,9 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
-  type PointerEvent,
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/cn";
@@ -67,9 +67,7 @@ export default function Combobox({
         setOpts([]);
         setBusy(false);
       });
-      return () => {
-        cancelled = true;
-      };
+      return () => { cancelled = true; };
     }
     Promise.resolve()
       .then(() => {
@@ -83,33 +81,26 @@ export default function Combobox({
         setHover(0);
         setBusy(false);
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [query, open, search, minQuery]);
 
   useEffect(() => {
-    const onClick = (e: MouseEvent) => {
+    const onDown = (e: MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
   }, []);
+
+  // Input is always in the DOM so focus is immediate — no setTimeout needed.
+  useLayoutEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
 
   const select = (o: ComboOption) => {
     onChange(o);
     setOpen(false);
     setQuery("");
-  };
-
-  const openAndFocus = () => {
-    setOpen(true);
-    setTimeout(() => inputRef.current?.focus(), 0);
-  };
-
-  const handleControlPointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
-    openAndFocus();
   };
 
   const grouped = (() => {
@@ -124,43 +115,56 @@ export default function Combobox({
 
   let flatIndex = -1;
 
+  // Whether the selected-value overlay is visible (input is opacity-0 behind it).
+  const showValueOverlay = Boolean(value && !open);
+
   return (
     <div ref={rootRef} className={cn("relative", className)}>
       {label ? (
-        <label htmlFor={id} className="text-[12px] font-medium text-ink-muted">
+        <label htmlFor={id} className="text-[12px] font-medium text-ink-muted cursor-text">
           {label}
         </label>
       ) : null}
+
+      {/*
+        The entire bordered block is one click target.
+        The <input> is always mounted so every click inside naturally focuses it
+        and triggers onFocus → setOpen(true).
+        When a value is selected and the dropdown is closed, a pointer-events-none
+        overlay shows the formatted value while the invisible input sits behind it.
+      */}
       <div
-        onPointerDownCapture={handleControlPointerDown}
         className={cn(
-          "flex cursor-text items-center gap-2 rounded-md bg-white border border-border px-3 h-11 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20",
+          "relative flex cursor-text items-center gap-2 rounded-md border border-border bg-white px-3 h-11 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20",
           inputClassName,
         )}
       >
         {leading ? <span className="text-ink-muted">{leading}</span> : null}
-        {value && !open ? (
-          <button
-            type="button"
-            onClick={openAndFocus}
-            className="flex h-full w-full flex-1 min-w-0 items-center text-left"
-          >
-            {renderValue ? (
-              renderValue(value)
-            ) : (
-              <span className="flex flex-col">
-                <span className="text-[14px] font-semibold text-ink truncate">
-                  {value.label}
-                </span>
-                {value.sublabel ? (
-                  <span className="text-[11px] text-ink-muted truncate">
-                    {value.sublabel}
+
+        {/* Stretch wrapper fills the full height so the overlay covers the whole area */}
+        <div className="relative flex min-w-0 flex-1 self-stretch items-center">
+          {/* Value display — sits above the input, passes all pointer events through */}
+          {showValueOverlay ? (
+            <div className="pointer-events-none absolute inset-0 flex items-center">
+              {renderValue ? (
+                renderValue(value!)
+              ) : (
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate text-[14px] font-semibold text-ink">
+                    {value!.label}
                   </span>
-                ) : null}
-              </span>
-            )}
-          </button>
-        ) : (
+                  {value!.sublabel ? (
+                    <span className="truncate text-[11px] text-ink-muted">
+                      {value!.sublabel}
+                    </span>
+                  ) : null}
+                </span>
+              )}
+            </div>
+          ) : null}
+
+          {/* Input — always rendered. When the overlay is active it is invisible
+              but still covers the full area and receives focus/click events. */}
           <input
             id={id}
             ref={inputRef}
@@ -186,34 +190,48 @@ export default function Combobox({
               }
               if (e.key === "Escape") setOpen(false);
             }}
-            placeholder={placeholder}
-            className="h-full w-full flex-1 min-w-0 bg-transparent outline-none text-[14px] text-ink placeholder:text-ink-subtle"
+            placeholder={showValueOverlay ? "" : placeholder}
+            aria-label={showValueOverlay ? (value?.label ?? label) : label}
+            className={cn(
+              "h-full w-full min-w-0 flex-1 bg-transparent text-[14px] text-ink outline-none placeholder:text-ink-subtle",
+              showValueOverlay && "opacity-0",
+            )}
           />
-        )}
-        {value && (
+        </div>
+
+        {value ? (
           <button
             type="button"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               onChange(null);
               setQuery("");
               setOpen(true);
-              setTimeout(() => inputRef.current?.focus(), 0);
             }}
             aria-label="Clear"
-            className="text-ink-muted hover:text-ink"
+            className="shrink-0 text-ink-muted hover:text-ink"
           >
-            <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              width={14}
+              height={14}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.2}
+              strokeLinecap="round"
+              aria-hidden
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-        )}
+        ) : null}
       </div>
 
-      {open && (
+      {open ? (
         <div
           role="listbox"
-          className="absolute z-50 mt-1.5 w-full min-w-[280px] rounded-lg bg-white shadow-[var(--shadow-pop)] border border-border-soft max-h-[340px] overflow-y-auto scrollbar-thin animate-pop-in"
+          className="absolute z-50 mt-1.5 w-full min-w-[280px] rounded-lg border border-border-soft bg-white shadow-[var(--shadow-pop)] max-h-[340px] overflow-y-auto scrollbar-thin animate-pop-in"
         >
           {busy ? (
             <div className="px-4 py-3 text-[13px] text-ink-muted">Searching…</div>
@@ -223,7 +241,7 @@ export default function Combobox({
             Array.from(grouped.entries()).map(([gk, list]) => (
               <div key={gk}>
                 {gk ? (
-                  <div className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                  <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
                     {gk}
                   </div>
                 ) : null}
@@ -247,18 +265,18 @@ export default function Combobox({
                         renderOption(o, active)
                       ) : (
                         <>
-                          <span className="flex-1 min-w-0">
-                            <span className="block text-[14px] font-semibold text-ink truncate">
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[14px] font-semibold text-ink">
                               {o.label}
                             </span>
                             {o.sublabel ? (
-                              <span className="block text-[12px] text-ink-muted truncate">
+                              <span className="block truncate text-[12px] text-ink-muted">
                                 {o.sublabel}
                               </span>
                             ) : null}
                           </span>
                           {o.badge ? (
-                            <span className="text-[11px] font-semibold text-ink-muted bg-surface-sunken px-2 py-0.5 rounded">
+                            <span className="rounded bg-surface-sunken px-2 py-0.5 text-[11px] font-semibold text-ink-muted">
                               {o.badge}
                             </span>
                           ) : null}
@@ -271,7 +289,7 @@ export default function Combobox({
             ))
           )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

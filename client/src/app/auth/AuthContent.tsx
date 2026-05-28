@@ -23,8 +23,12 @@ export default function AuthContent() {
 
   useEffect(() => {
     if (status !== "ready" || !user) return;
+    if (redirect) {
+      router.replace(redirect);
+      return;
+    }
     router.replace(user.role === "partner" ? "/partner/dashboard" : "/");
-  }, [router, status, user]);
+  }, [router, redirect, status, user]);
 
   const subtitle = useMemo(() => {
     if (initialMode === "register") {

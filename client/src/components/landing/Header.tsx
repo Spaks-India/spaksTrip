@@ -54,7 +54,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     labelKey: "nav.transport",
-    href: "#",
+    href: "/transport",
     menu: [
       { labelKey: "Taxi Tour Package", href: "/taxi-package" },
       { labelKey: "nav.cabs", href: "/cabs" },
@@ -91,7 +91,14 @@ const NAV_ITEMS: NavItem[] = [
   {
     labelKey: "Events",
     href: "/events",
-    
+    menu: [
+      { labelKey: "Wedding Planner", href: "/events/wedding" },
+      { labelKey: "Corporate Events", href: "/events/corporate-events" },
+      { labelKey: "Destination Wedding", href: "/events/destination-wedding" },
+      { labelKey: "Birthday Party", href: "/events/birthday-party" },
+      { labelKey: "Engagement", href: "/events/engagement" },
+      { labelKey: "Cocktail Party", href: "/events/cocktail-party" },
+    ],
   },
   {
     labelKey: "SightSeeing",
@@ -118,9 +125,47 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { labelKey: "Queues", href: "/queues" },
-  { labelKey: "Accounts", href: "/accounts" },
-  { labelKey: "Reports", href: "/reports" },
-  { labelKey: "Admin", href: "/admin" },
+  {
+    labelKey: "Accounts",
+    href: "#",
+    menu: [
+      { labelKey: "Payment History", href: "/account/payment-history" },
+      { labelKey: "Invoice History", href: "/account/invoice-history" },
+      { labelKey: "Flight Credit Note", href: "/account/credit-notes/flight" },
+      { labelKey: "Hotel Credit Note", href: "/account/credit-notes/hotel" },
+      { labelKey: "Car Credit Note", href: "/account/credit-notes/car" },
+      { labelKey: "Bus Credit Note", href: "/account/credit-notes/bus" },
+      { labelKey: "Insurance Credit Note", href: "/account/credit-notes/insurance" },
+      { labelKey: "Transfer Credit Note", href: "/account/credit-notes/transfer" },
+      { labelKey: "Bank Account", href: "/account/bank-account" },
+      { labelKey: "GST Details", href: "/account/gst-details" },
+      { labelKey: "ITR Declaration", href: "/account/itr-declaration" },
+      { labelKey: "PAN Declaration", href: "/account/pan-declaration" },
+      { labelKey: "Spakstrip Bank Details", href: "/account/spakstrip-bank" },
+    ],
+  },
+  {
+    labelKey: "Reports",
+    href: "#",
+    menu: [
+      { labelKey: "Daily Sales Report", href: "/account/daily-sales-report" },
+      { labelKey: "Sales Report", href: "/account/sales-report" },
+      { labelKey: "PG Failure Queue", href: "/account/pg-failure-queue" },
+    ],
+  },
+  {
+    labelKey: "Admin",
+    href: "#",
+    menu: [
+      { labelKey: "TBO Hotel Codes", href: "/admin/tbo-hotel-codes" },
+      { labelKey: "Markup Management", href: "/admin/markup" },
+      { labelKey: "Manual Hotel Listing", href: "/admin/manual/hotel" },
+      { labelKey: "Manual Flight Listing", href: "/admin/manual/flight" },
+      { labelKey: "Manual Cab Listing", href: "/admin/manual/cab" },
+      { labelKey: "Manual Tour Listing", href: "/admin/manual/tour" },
+      { labelKey: "Manual Intl Tour Listing", href: "/admin/manual/international-tour" },
+    ],
+  },
   { labelKey: "GST", href: "/gst" },
   { labelKey: "Islandhopper", href: "/islandhopper" },
   {
@@ -132,10 +177,18 @@ const NAV_ITEMS: NavItem[] = [
       { labelKey: "nav.investor_visa", href: "/visa/investor-visa" },
       { labelKey: "nav.study_visa", href: "/visa/study-visa" },
       { labelKey: "nav.visit_visa", href: "/visa/visit-visa" },
-      { labelKey: "nav.tourist_visa", href: "#" },
+      { labelKey: "nav.tourist_visa", href: "/visa/tourist-visa" },
     ],
   },
-  { labelKey: "Life insurance", href: "/insurance" },
+  {
+    labelKey: "Life insurance",
+    href: "/insurance",
+    menu: [
+      { labelKey: "Buy Insurance", href: "/insurance" },
+      { labelKey: "Renew Insurance", href: "/insurance/renew" },
+    ],
+  },
+  { labelKey: "Contact Us", href: "/contact" },
 ];
 
 const COUNTRIES = [

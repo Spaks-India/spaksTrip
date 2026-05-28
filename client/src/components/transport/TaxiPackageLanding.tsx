@@ -6,6 +6,8 @@ import Link from "next/link";
 import OutstationSearch from "./OutstationSearch";
 import AirportTransferSearch from "./AirportTransferSearch";
 import SightseeingSearch from "./SightseeingSearch";
+import { isTaxiManagerRole } from "@/lib/taxiRoles";
+import { useAuthStore } from "@/state/authStore";
 
 type Tab = "outstation" | "airport" | "sightseeing";
 
@@ -56,8 +58,17 @@ const POPULAR_ROUTES = [
   { from: "Jaipur", to: "Jodhpur", km: "336 km", fare: "₹3,299" },
 ];
 
+const LIST_TAXI_ROUTE = "/taxi-package/list-your-taxi";
+
 export default function TaxiPackageLanding() {
   const [activeTab, setActiveTab] = useState<Tab>("outstation");
+  const user = useAuthStore((state) => state.user);
+
+  const isCustomer = user?.role === "customer";
+  const listTaxiHref =
+    user && isTaxiManagerRole(user.role)
+      ? LIST_TAXI_ROUTE
+      : `/auth?redirect=${encodeURIComponent(LIST_TAXI_ROUTE)}`;
 
   return (
     <div>
@@ -160,21 +171,23 @@ export default function TaxiPackageLanding() {
           ))}
         </div>
 
-        {/* Partner CTA */}
-        <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl bg-[var(--brand-50)] border border-[var(--brand-100)] px-6 py-8 text-center sm:flex-row sm:text-left">
-          <div className="flex-1">
-            <p className="text-[15px] font-bold text-[var(--ink)]">Are you a cab operator?</p>
-            <p className="mt-1 text-[13px] text-[var(--ink-muted)]">
-              List your fleet on SpaksTrip and get bookings from millions of travelers across India.
-            </p>
+        {/* Partner CTA — hidden for customers, auth-gated for guests */}
+        {!isCustomer && (
+          <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl bg-[var(--brand-50)] border border-[var(--brand-100)] px-6 py-8 text-center sm:flex-row sm:text-left">
+            <div className="flex-1">
+              <p className="text-[15px] font-bold text-[var(--ink)]">Are you a cab operator?</p>
+              <p className="mt-1 text-[13px] text-[var(--ink-muted)]">
+                List your fleet on SpaksTrip and get bookings from millions of travelers across India.
+              </p>
+            </div>
+            <Link
+              href={listTaxiHref}
+              className="inline-flex shrink-0 items-center rounded-xl bg-[var(--brand-600)] px-6 py-3 text-[13px] font-bold text-white transition-opacity hover:opacity-90"
+            >
+              List Your Taxi
+            </Link>
           </div>
-          <Link
-            href="/taxi-package/list-your-taxi"
-            className="inline-flex shrink-0 items-center rounded-xl bg-[var(--brand-600)] px-6 py-3 text-[13px] font-bold text-white transition-opacity hover:opacity-90"
-          >
-            List Your Taxi
-          </Link>
-        </div>
+        )}
       </section>
     </div>
 

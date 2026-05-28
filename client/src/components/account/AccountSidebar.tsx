@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
+  { label: "View Accounts", href: "/account/view-accounts" },
+  { label: "Make Payment", href: "/account/make-payment" },
   { label: "Payment History", href: "/account/payment-history" },
   { label: "Invoice History", href: "/account/invoice-history" },
   { label: "Flight Credit Note", href: "/account/credit-notes/flight" },
