@@ -212,7 +212,8 @@ export async function tboBookHotel(input: HotelBookInput): Promise<HotelBookOutp
   } catch (err) {
     // Handle timeout: attempt to retrieve booking status via BookingDetail
     if (isTimeoutError(err)) {
-      logError("Hotel Book", new Error(`Booking request timed out (${err.message}). Attempting to verify booking status...`));
+      const timeoutMsg = err instanceof Error ? err.message : String(err);
+      logError("Hotel Book", new Error(`Booking request timed out (${timeoutMsg}). Attempting to verify booking status...`));
       bookingTimeout = true;
 
       // Try to fetch booking detail using ClientReferenceId or booking code

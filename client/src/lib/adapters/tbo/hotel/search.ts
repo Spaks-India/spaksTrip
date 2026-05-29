@@ -131,6 +131,10 @@ function mapHotel(h: TboHotelResult, city: string, country: string): Hotel {
 export async function tboSearchHotels(
   input: HotelSearchInput,
 ): Promise<{ hotels: Hotel[]; minPrice: number; maxPrice: number }> {
+  if (!input.cityCode) {
+    throw new Error("cityCode is required for hotel search");
+  }
+
   const cityId = getTboCityId(input.cityCode);
   if (!cityId) {
     throw new Error(`TBO CityId not found for city code: ${input.cityCode}`);
@@ -182,7 +186,7 @@ export async function tboSearchHotels(
 
     // Derive city name/country from input (we only have the code)
     // The UI stores `City` objects with code/name/country in the search store
-    const city = input.cityCode;
+    const city = input.cityCode!;
     const country = ""; // frontend components use city code; country is display-only
 
     const hotels = rawHotels.map((h) => {

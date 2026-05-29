@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
         try {
           console.log(`[Cancel Status] Attempting fallback verification via BookingDetail`);
           const bookingDetail = await tboGetHotelBookingDetail({
-            bookingRefNo,
+            confirmationNo: bookingRefNo,
           });
 
           const isCancelled = bookingDetail.bookingStatus === "Cancelled";

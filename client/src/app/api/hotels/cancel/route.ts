@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
         // Step 3: Timeout fallback - verify status via BookingDetail
         try {
           const bookingDetail = await tboGetHotelBookingDetail({
-            bookingRefNo,
+            bookingId,
           });
 
           const isCancelled = bookingDetail.bookingStatus === "Cancelled";

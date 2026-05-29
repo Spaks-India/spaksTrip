@@ -37,9 +37,9 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, booking: result.booking });
-  } catch (err) {
-    const stack = err instanceof Error ? err.stack : String(err);
-    const message = err instanceof Error ? err.message : "Verification failed";
+  } catch (error) {
+    const stack = error instanceof Error ? error.stack : String(error);
+    const message = error instanceof Error ? error.message : "Verification failed";
     console.error("[API /api/hotels/book/verify] FAILED");
     console.error("  stack:", stack);
     return err(message, 500);
