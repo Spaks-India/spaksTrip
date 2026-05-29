@@ -6,12 +6,12 @@
         "ErrorCode": 0,
         "ErrorMessage": ""
       },
-      "TraceId": "762321de-f8e1-42b3-8ebd-3f09e326dbf8",
+      "TraceId": "f3f8c472-41b7-40e4-8529-e03cabf5bdfd",
       "ResponseStatus": 1,
       "Response": {
         "ItineraryChangeList": null,
-        "PNR": "8VMPZW",
-        "BookingId": 2134200,
+        "PNR": "92NZI4",
+        "BookingId": 2134895,
         "SSRDenied": false,
         "SSRMessage": null,
         "Status": 1,
@@ -24,14 +24,14 @@
           "JourneyType": 4,
           "SearchCombinationType": 2,
           "SupplierFareClasses": null,
-          "TBOConfNo": "TBFOGNVI4",
+          "TBOConfNo": "TBF87YSKK",
           "TBOTripID": null,
           "TripIndicator": 1,
           "BookingAllowedForRoamer": true,
-          "BookingId": 2134200,
+          "BookingId": 2134895,
           "IsCouponAppilcable": true,
           "IsManual": false,
-          "PNR": "8VMPZW",
+          "PNR": "92NZI4",
           "IsDomestic": false,
           "ResultFareType": "RegularFare",
           "Source": 4,
@@ -50,15 +50,15 @@
             "ServiceFeeDisplayType": 0,
             "Currency": "INR",
             "BaseFare": 453180,
-            "Tax": 62072,
+            "Tax": 62150,
             "TaxBreakup": [
               {
                 "key": "K3",
-                "value": 24334
+                "value": 24338
               },
               {
                 "key": "YQTax",
-                "value": 33494
+                "value": 33562
               },
               {
                 "key": "INTax",
@@ -66,14 +66,14 @@
               },
               {
                 "key": "OtherTaxes",
-                "value": 2710
+                "value": 2716
               },
               {
                 "key": "TotalTax",
-                "value": 62072
+                "value": 62150
               }
             ],
-            "YQTax": 33494,
+            "YQTax": 33562,
             "AdditionalTxnFeeOfrd": 0,
             "AdditionalTxnFeePub": 0,
             "PGCharge": 0,
@@ -97,11 +97,11 @@
               }
             ],
             "Discount": 0,
-            "PublishedFare": 515252,
+            "PublishedFare": 515330,
             "CommissionEarned": 0,
             "PLBEarned": 0,
             "IncentiveEarned": 0,
-            "OfferedFare": 515252,
+            "OfferedFare": 515330,
             "TdsOnCommission": 0,
             "TdsOnPLB": 0,
             "TdsOnIncentive": 0,
@@ -120,7 +120,7 @@
                   {
                     "Index": 1,
                     "Format": "PDF417",
-                    "Content": "M1DHIMAN/HARSHI        8VMPZW DELLHRBA 0142 196Y00000000 000",
+                    "Content": "M1KALRA/SHREYA         92NZI4 DELLHRBA 0142 196Y00000000 000",
                     "BarCodeInBase64": null,
                     "JourneyWayType": 3
                   }
@@ -128,10 +128,10 @@
               },
               "DocumentDetails": [
                 {
-                  "DocumentExpiryDate": "2027-12-06",
+                  "DocumentExpiryDate": "2028-11-11",
                   "DocumentIssueDate": "2025-12-06",
                   "DocumentIssuingCountry": "IN",
-                  "DocumentNumber": "KJHHJKHKJH",
+                  "DocumentNumber": "HJSSJNS",
                   "DocumentTypeId": "Passport",
                   "PaxId": 0,
                   "ResultFareType": 0
@@ -149,18 +149,18 @@
                   "FlightInfoIndex": "1"
                 }
               ],
-              "PaxId": 3436257,
+              "PaxId": 3437061,
               "Title": "Miss",
-              "FirstName": "Harshi",
-              "LastName": "Dhiman",
+              "FirstName": "Shreya",
+              "LastName": "Kalra",
               "PaxType": 1,
-              "DateOfBirth": "2000-08-02T00:00:00",
+              "DateOfBirth": "2000-10-11T00:00:00",
               "Gender": 2,
               "IsPANRequired": false,
               "IsPassportRequired": true,
               "PAN": "",
-              "PassportNo": "KJHHJKHKJH",
-              "PassportExpiry": "2027-12-06T00:00:00",
+              "PassportNo": "HJSSJNS",
+              "PassportExpiry": "2028-11-11T00:00:00",
               "AddressLine1": "123, Test",
               "Fare": {
                 "CFARAmount": 0,
@@ -168,15 +168,15 @@
                 "ServiceFeeDisplayType": 0,
                 "Currency": "INR",
                 "BaseFare": 226590,
-                "Tax": 31036,
+                "Tax": 31075,
                 "TaxBreakup": [
                   {
                     "key": "K3",
-                    "value": 12167
+                    "value": 12169
                   },
                   {
                     "key": "YQTax",
-                    "value": 16747
+                    "value": 16781
                   },
                   {
                     "key": "INTax",
@@ -184,14 +184,14 @@
                   },
                   {
                     "key": "OtherTaxes",
-                    "value": 1355
+                    "value": 1358
                   },
                   {
                     "key": "TotalTax",
-                    "value": 31036
+                    "value": 31075
                   }
                 ],
-                "YQTax": 16747,
+                "YQTax": 16781,
                 "AdditionalTxnFeeOfrd": 0,
                 "AdditionalTxnFeePub": 0,
                 "PGCharge": 0,
@@ -215,11 +215,11 @@
                   }
                 ],
                 "Discount": 0,
-                "PublishedFare": 257626,
+                "PublishedFare": 257665,
                 "CommissionEarned": 0,
                 "PLBEarned": 0,
                 "IncentiveEarned": 0,
-                "OfferedFare": 257626,
+                "OfferedFare": 257665,
                 "TdsOnCommission": 0,
                 "TdsOnPLB": 0,
                 "TdsOnIncentive": 0,
@@ -263,7 +263,7 @@
                   {
                     "Index": 1,
                     "Format": "PDF417",
-                    "Content": "M1DHIMAN/RAJ           8VMPZW DELLHRBA 0142 196Y00000000 000",
+                    "Content": "M1DHIMAN/RAJ           92NZI4 DELLHRBA 0142 196Y00000000 000",
                     "BarCodeInBase64": null,
                     "JourneyWayType": 3
                   }
@@ -292,7 +292,7 @@
                   "FlightInfoIndex": "1"
                 }
               ],
-              "PaxId": 3436258,
+              "PaxId": 3437062,
               "Title": "Mr",
               "FirstName": "Raj",
               "LastName": "Dhiman",
@@ -311,15 +311,15 @@
                 "ServiceFeeDisplayType": 0,
                 "Currency": "INR",
                 "BaseFare": 226590,
-                "Tax": 31036,
+                "Tax": 31075,
                 "TaxBreakup": [
                   {
                     "key": "K3",
-                    "value": 12167
+                    "value": 12169
                   },
                   {
                     "key": "YQTax",
-                    "value": 16747
+                    "value": 16781
                   },
                   {
                     "key": "INTax",
@@ -327,14 +327,14 @@
                   },
                   {
                     "key": "OtherTaxes",
-                    "value": 1355
+                    "value": 1358
                   },
                   {
                     "key": "TotalTax",
-                    "value": 31036
+                    "value": 31075
                   }
                 ],
-                "YQTax": 16747,
+                "YQTax": 16781,
                 "AdditionalTxnFeeOfrd": 0,
                 "AdditionalTxnFeePub": 0,
                 "PGCharge": 0,
@@ -358,11 +358,11 @@
                   }
                 ],
                 "Discount": 0,
-                "PublishedFare": 257626,
+                "PublishedFare": 257665,
                 "CommissionEarned": 0,
                 "PLBEarned": 0,
                 "IncentiveEarned": 0,
-                "OfferedFare": 257626,
+                "OfferedFare": 257665,
                 "TdsOnCommission": 0,
                 "TdsOnPLB": 0,
                 "TdsOnIncentive": 0,
@@ -416,7 +416,7 @@
                 "FareClass": "Y",
                 "OperatingCarrier": ""
               },
-              "AirlinePNR": "8VMPZW",
+              "AirlinePNR": "92NZI4",
               "Origin": {
                 "Airport": {
                   "AirportCode": "DEL",
@@ -463,7 +463,7 @@
               "Destination": "LHR",
               "Airline": "BA",
               "FareBasisCode": "YNNF00S0",
-              "FareRuleDetail": "<table border='1'><tr><th>Sector</th><th>Duration</th><th>Type</th><th>DepartureType</th><th>PenaltyDetails</th><th>Currency</th></tr><tr><th rowspan='3'>DEL-LON</th><td>REST OF TIME PERIOD</td><td>Reissue</td><td>Before Departure</td><td>Adult: 0</td><th rowspan='3'>INR</th></tr><tr><td>REST OF TIME PERIOD</td><td>Refund</td><td>Before Departure</td><td>Adult: 0</td></tr><tr><td>REST OF TIME</td><td>Refund</td><td>Before Departure</td><td>Adult: 0</td></tr></table><br /><br /><ul><li><b>Advance Purchase</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Earliest reservation date before departure <b>No restriction</b></li><li>Earliest ticketing date before departure <b>No restriction</b></li><li>Latest reservation date before departure <b>No restriction</b></li><li>Latest ticketing date before departure <b>31MAY26  2359</b></li><li>Latest ticketing date after reservation <b>31MAY26  2359</b></li></ul></li><li><b>There is no Minimum Stay requirement</b><br><li><b>There is no Maximum Stay requirement</b><br><fieldset><legend><b><b>Adult</b><br></b></legend><ul><li><b>Revalidation/Reissue</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Revalidation before/after departure, including failure to show at first/subsequent flight(s) : <b>Not Allowed</b></li><li>Reissue, including failure to show at first flight : <b>Allowed with Restrictions</b></li><li>Revalidation/Reissue request, including failure to show at first flight, must be made prior to <b>28MAY27  0000</b></li><li><b>Prior to Departure of journey</b><ul><u>Reissue</u><li>Reissue : <b>Allowed, Free of charge</b></li><li>Maximum reissue penalty fee for entire ticket (per reissue) : <b>No charge</b></li></ul></li><li><b>Failure to show at first flight</b><ul><u>Reissue</u><li>Reissue : <b>Allowed, Free of charge</b></li><li>Maximum reissue penalty fee for entire ticket (per reissue) : <b>No charge</b></li></ul></li><li><b>After departure of journey</b><ul><li>Revalidation/Reissue request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at subsequent flight(s)</b><ul><li>Revalidation/Reissue request must be made prior to : <b>No restriction</b></li></ul></li></ul></li><li><b>Refund</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Refund, including failure to show at first flight : <b>Allowed with Restrictions</b></li><li><b>Prior to Departure of journey</b><ul><li>Refund : <b>Allowed, Free of charge</b></li><li>Maximum Refund penalty fee for entire ticket : <b>No charge</b></li><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at first flight</b><ul><li>Refund : <b>Allowed, Free of charge</b></li><li>Maximum Refund penalty fee for entire ticket : <b>No charge</b></li><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>After departure of journey</b><ul><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at subsequent flight(s)</b><ul><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li></ul></li><br><b>* Revalidation is a modification of the original ticket without any reissue of a new ticket.</b><br><b>* For Reissue, Penalty fees are in addition to any difference in fare.</b><br><b>* For Refund, certain Taxes are non-refundable.</b></ul></fieldset></ul><br/> <br/>RateClass : YNNF00S0<br/>FareClass : YNNF00S0<br/>marketing Company : BA<br/>Booking Class : Y<br/>Origin : DEL<br/>destination : LON<br/>ruleSectionLocalId : 1<br/>ruleCategoryCode : (5)<br/>AP.ADVANCE RES/TKTFOR YNNF00S0 TYPE FARES  RESERVATIONS ARE REQUIRED FOR ALL SECTORS.  WHEN RESERVATIONS ARE MADE AT LEAST 3 DAYS BEFORE  DEPARTURE TICKETING MUST BE COMPLETED WITHIN 3 DAYS AFTER  RESERVATIONS ARE MADE OR AT LEAST 3 DAYS BEFORE DEPARTURE  WHICHEVER IS EARLIER.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       WHEN RESERVATIONS ARE MADE AT LEAST 2 DAYS BEFORE       DEPARTURE TICKETING MUST BE COMPLETED THE DAY       RESERVATIONS ARE MADE.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       WHEN RESERVATIONS ARE MADE AT LEAST 1 DAY BEFORE       DEPARTURE TICKETING MUST BE COMPLETED THE DAY       RESERVATIONS ARE MADE.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       TICKETING MUST BE COMPLETED WITHIN 1 HOUR AFTER       RESERVATIONS ARE MADE.         NOTE -          DUE TO TTL ROBOT PROCESS DIFFERENCES MAY EXIST          BETWEEN THE CRS LAST TICKETING DATE AND TTL ROBOT          REMARK. THE INFORMATION BY SSR IN THE PNR          PREVAILS.<br/>ruleSectionLocalId : 2<br/>ruleCategoryCode : (16)<br/>PE.PENALTIES         NOTE -          NO PENALTIES UNLESS OTHERWISE SPECIFIED          REFUND WITHOUT PENALTY PERMITTED AT ANY TIME          UNLIMITED CHANGES WITHOUT PENALTY PERMITTED          AT ANY TIME.          -------------------------------------------------          A CHANGE IS A DATE/ FLIGHT/ ROUTING/  BOOKING          CODE CHANGE.          -------------------------------------------------          WHEN MORE THAN ONE FARE COMPONENT IS CHANGED          THE HIGHEST PENALTY OF ALL CHANGED FARE COMPONENTS          WITHIN THE JOURNEY APPLIES.          -------------------------------------------------          --- REPRICING CONDITIONS ---          A. BEFORE DEPARTURE OF JOURNEY          WHEN THE FIRST FARE COMPONENT IS CHANGED          THE ITINERARY MUST BE RE-PRICED USING CURRENT          FARES IN EFFECT ON THE DATE THE TICKET          IS REISSUED.          B. BEFORE DEPARTURE OF JOURNEY          WHEN CHANGES ARE TO BOOKING CODE ONLY IN THE FIRST          FARE COMPONENT AND RESULT IN A HIGHER FARE THE          ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE          OR USING CURRENT FARES IN EFFECT ON THE DATE          THE TICKET IS REISSUED - WHICHEVER IS LOWER.          C. BEFORE DEPARTURE OF JOURNEY          WHEN THERE ARE NO CHANGES TO THE FIRST FARE          COMPONENT BUT OTHER  FARE COMPONENTS ARE CHANGED          THE ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES  IN EFFECT ON THE PREVIOUS TICKETING DATE OR          USING CURRENT FARES IN EFFECT ON THE DATE THE          TICKET  IS REISSUED - WHICHEVER IS LOWER.          D. AFTER DEPARTURE OF JOURNEY          THE ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE.          --------------------------------------------------          NEW TICKET MUST BE LOWER - EQUAL OR HIGHER THAN          PREVIOUS AND MUST COMPLY WITH ALL PROVISIONS OF          THE NEW FARE BEING APPLIED.          --------------------------------------------------          WHEN THE ITINERARY RESULTS IN A HIGHER FARE THE          DIFFERENCE WILL BE COLLECTED.          ANY APPLICABLE CHANGE FEE STILL APPLIES.          --------------------------------------------------          WHEN THE NEW ITINERARY RESULTS IN A LOWER FARE          THE RESIDUAL AMOUNT WILL BE REFUNDED. ANY          APPLICABLE CHANGE FEE STILL APPLIES.          ----------------------------------------------          FARE COMPONENT IS FULLY REFUNDABLE.          -------------------------------------------------          REFUND PERMITTED WITHIN TICKET VALIDITY.          -------------------------------------------------          WHEN COMBINING NON-REFUNDABLE FARES WITH          REFUNDABLE FARES          1. THE AMOUNT PAID ON EACH REFUNDABLE FARE          COMPONENT IS REFUNDED          2. THE AMOUNT PAID ON EACH NON-REFUNDABLE FARE          COMPONENT WILL NOT BE REFUNDED.          3. WHEN COMBINING FARES CHARGE THE SUM OF THE          CANCELLATION FEES OF ALL CANCELLED FARE          COMPONENTS.          --------------------------------------------------          REFUND OF UNUSED TAXES FEES AND CHARGES PAID TO          THIRD PARTIES PERMITTED. ASSOCIATED CARRIER          IMPOSED CHARGES ARE REFUNDABLE.          --------------------------------------------------          ANY NON-REFUNDABLE AMOUNT FROM A PREVIOUS TICKET          REMAINS NON-REFUNDABLE FOLLOWING A CHANGE.          --------------------------------------------------          TICKET IS NOT TRANSFERABLE TO ANOTHER PERSON.          -------------------------------------------------          PARTIALLY USED TICKETS - REFUND THE DIFFERENCE -          IF ANY - BETWEEN THE FARE PAID AND THE FARE FOR          THE JOURNEY TRAVELLED.          ------ CANCELLATION REPRICING CONDITIONS-----          FLOWN COUPONS MUST BE REPRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE          THE FARE FOR THE JOURNEY TRAVELLED MUST BE CAPPED          AT THE TOTAL FARE AMOUNT PLUS CARRIER IMPOSED          CHARGE PAID ON THE TICKET BEING PRESENTED FOR          REFUND          FULLY FLOWN FARE COMPONENTS MAY BE REPRICED USING          ANY BOOKING CODE WITHIN THE SAME CABIN PROVIDED          THE NEW FARE AMOUNT IS EQUAL OR HIGHER THAN          ORIGINAL          PARTIALLY FLOWN FARE COMPONENTS MUST BE REPRICED          USING THE SAME OR HIGHER BOOKING CODE.<br/><ul><li>GST, RAF AND ANY OTHER APPLICABLE CHARGES ARE EXTRA.</li><li>FEES ARE INDICATIVE PER PAX AND PER SECTOR.</li><li>FOR DOMESTIC BOOKINGS, PASSENGERS MUST SUBMIT THE CANCELLATION OR REISSUE REQUEST AT LEAST 2 HOURS BEFORE THE TIME LIMIT DEFINED IN THE AIRLINE's POLICY.</li><li>FOR INTERNATIONAL BOOKINGS, PASSENGERS MUST SUBMIT THE CANCELLATION OR REISSUE REQUEST AT LEAST 4 HOURS BEFORE THE TIME LIMIT DEFINED IN THE AIRLINE's POLICY.</li></ul>",
+              "FareRuleDetail": "<table border='1'><tr><th>Sector</th><th>Duration</th><th>Type</th><th>DepartureType</th><th>PenaltyDetails</th><th>Currency</th></tr><tr><th rowspan='3'>DEL-LON</th><td>REST OF TIME PERIOD</td><td>Reissue</td><td>Before Departure</td><td>Adult: 0</td><th rowspan='3'>INR</th></tr><tr><td>REST OF TIME PERIOD</td><td>Refund</td><td>Before Departure</td><td>Adult: 0</td></tr><tr><td>REST OF TIME</td><td>Refund</td><td>Before Departure</td><td>Adult: 0</td></tr></table><br /><br /><ul><li><b>Advance Purchase</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Earliest reservation date before departure <b>No restriction</b></li><li>Earliest ticketing date before departure <b>No restriction</b></li><li>Latest reservation date before departure <b>No restriction</b></li><li>Latest ticketing date before departure <b>01JUN26  2359</b></li><li>Latest ticketing date after reservation <b>01JUN26  2359</b></li></ul></li><li><b>There is no Minimum Stay requirement</b><br><li><b>There is no Maximum Stay requirement</b><br><fieldset><legend><b><b>Adult</b><br></b></legend><ul><li><b>Revalidation/Reissue</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Revalidation before/after departure, including failure to show at first/subsequent flight(s) : <b>Not Allowed</b></li><li>Reissue, including failure to show at first flight : <b>Allowed with Restrictions</b></li><li>Revalidation/Reissue request, including failure to show at first flight, must be made prior to <b>29MAY27  0000</b></li><li><b>Prior to Departure of journey</b><ul><u>Reissue</u><li>Reissue : <b>Allowed, Free of charge</b></li><li>Maximum reissue penalty fee for entire ticket (per reissue) : <b>No charge</b></li></ul></li><li><b>Failure to show at first flight</b><ul><u>Reissue</u><li>Reissue : <b>Allowed, Free of charge</b></li><li>Maximum reissue penalty fee for entire ticket (per reissue) : <b>No charge</b></li></ul></li><li><b>After departure of journey</b><ul><li>Revalidation/Reissue request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at subsequent flight(s)</b><ul><li>Revalidation/Reissue request must be made prior to : <b>No restriction</b></li></ul></li></ul></li><li><b>Refund</b><br>Fare Component <b>YNNF00S0</b>&emsp; Sector <b>DEL-LON</b> &nbsp;<ul><li>Refund, including failure to show at first flight : <b>Allowed with Restrictions</b></li><li><b>Prior to Departure of journey</b><ul><li>Refund : <b>Allowed, Free of charge</b></li><li>Maximum Refund penalty fee for entire ticket : <b>No charge</b></li><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at first flight</b><ul><li>Refund : <b>Allowed, Free of charge</b></li><li>Maximum Refund penalty fee for entire ticket : <b>No charge</b></li><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>After departure of journey</b><ul><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li><li><b>Failure to show at subsequent flight(s)</b><ul><li>Refund request must be made prior to : <b>No restriction</b></li></ul></li></ul></li><br><b>* Revalidation is a modification of the original ticket without any reissue of a new ticket.</b><br><b>* For Reissue, Penalty fees are in addition to any difference in fare.</b><br><b>* For Refund, certain Taxes are non-refundable.</b></ul></fieldset></ul><br/> <br/>RateClass : YNNF00S0<br/>FareClass : YNNF00S0<br/>marketing Company : BA<br/>Booking Class : Y<br/>Origin : DEL<br/>destination : LON<br/>ruleSectionLocalId : 1<br/>ruleCategoryCode : (5)<br/>AP.ADVANCE RES/TKTFOR YNNF00S0 TYPE FARES  RESERVATIONS ARE REQUIRED FOR ALL SECTORS.  WHEN RESERVATIONS ARE MADE AT LEAST 3 DAYS BEFORE  DEPARTURE TICKETING MUST BE COMPLETED WITHIN 3 DAYS AFTER  RESERVATIONS ARE MADE OR AT LEAST 3 DAYS BEFORE DEPARTURE  WHICHEVER IS EARLIER.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       WHEN RESERVATIONS ARE MADE AT LEAST 2 DAYS BEFORE       DEPARTURE TICKETING MUST BE COMPLETED THE DAY       RESERVATIONS ARE MADE.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       WHEN RESERVATIONS ARE MADE AT LEAST 1 DAY BEFORE       DEPARTURE TICKETING MUST BE COMPLETED THE DAY       RESERVATIONS ARE MADE.  OR - RESERVATIONS ARE REQUIRED FOR ALL SECTORS.       TICKETING MUST BE COMPLETED WITHIN 1 HOUR AFTER       RESERVATIONS ARE MADE.         NOTE -          DUE TO TTL ROBOT PROCESS DIFFERENCES MAY EXIST          BETWEEN THE CRS LAST TICKETING DATE AND TTL ROBOT          REMARK. THE INFORMATION BY SSR IN THE PNR          PREVAILS.<br/>ruleSectionLocalId : 2<br/>ruleCategoryCode : (16)<br/>PE.PENALTIES         NOTE -          NO PENALTIES UNLESS OTHERWISE SPECIFIED          REFUND WITHOUT PENALTY PERMITTED AT ANY TIME          UNLIMITED CHANGES WITHOUT PENALTY PERMITTED          AT ANY TIME.          -------------------------------------------------          A CHANGE IS A DATE/ FLIGHT/ ROUTING/  BOOKING          CODE CHANGE.          -------------------------------------------------          WHEN MORE THAN ONE FARE COMPONENT IS CHANGED          THE HIGHEST PENALTY OF ALL CHANGED FARE COMPONENTS          WITHIN THE JOURNEY APPLIES.          -------------------------------------------------          --- REPRICING CONDITIONS ---          A. BEFORE DEPARTURE OF JOURNEY          WHEN THE FIRST FARE COMPONENT IS CHANGED          THE ITINERARY MUST BE RE-PRICED USING CURRENT          FARES IN EFFECT ON THE DATE THE TICKET          IS REISSUED.          B. BEFORE DEPARTURE OF JOURNEY          WHEN CHANGES ARE TO BOOKING CODE ONLY IN THE FIRST          FARE COMPONENT AND RESULT IN A HIGHER FARE THE          ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE          OR USING CURRENT FARES IN EFFECT ON THE DATE          THE TICKET IS REISSUED - WHICHEVER IS LOWER.          C. BEFORE DEPARTURE OF JOURNEY          WHEN THERE ARE NO CHANGES TO THE FIRST FARE          COMPONENT BUT OTHER  FARE COMPONENTS ARE CHANGED          THE ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES  IN EFFECT ON THE PREVIOUS TICKETING DATE OR          USING CURRENT FARES IN EFFECT ON THE DATE THE          TICKET  IS REISSUED - WHICHEVER IS LOWER.          D. AFTER DEPARTURE OF JOURNEY          THE ITINERARY MUST BE RE-PRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE.          --------------------------------------------------          NEW TICKET MUST BE LOWER - EQUAL OR HIGHER THAN          PREVIOUS AND MUST COMPLY WITH ALL PROVISIONS OF          THE NEW FARE BEING APPLIED.          --------------------------------------------------          WHEN THE ITINERARY RESULTS IN A HIGHER FARE THE          DIFFERENCE WILL BE COLLECTED.          ANY APPLICABLE CHANGE FEE STILL APPLIES.          --------------------------------------------------          WHEN THE NEW ITINERARY RESULTS IN A LOWER FARE          THE RESIDUAL AMOUNT WILL BE REFUNDED. ANY          APPLICABLE CHANGE FEE STILL APPLIES.          ----------------------------------------------          FARE COMPONENT IS FULLY REFUNDABLE.          -------------------------------------------------          REFUND PERMITTED WITHIN TICKET VALIDITY.          -------------------------------------------------          WHEN COMBINING NON-REFUNDABLE FARES WITH          REFUNDABLE FARES          1. THE AMOUNT PAID ON EACH REFUNDABLE FARE          COMPONENT IS REFUNDED          2. THE AMOUNT PAID ON EACH NON-REFUNDABLE FARE          COMPONENT WILL NOT BE REFUNDED.          3. WHEN COMBINING FARES CHARGE THE SUM OF THE          CANCELLATION FEES OF ALL CANCELLED FARE          COMPONENTS.          --------------------------------------------------          REFUND OF UNUSED TAXES FEES AND CHARGES PAID TO          THIRD PARTIES PERMITTED. ASSOCIATED CARRIER          IMPOSED CHARGES ARE REFUNDABLE.          --------------------------------------------------          ANY NON-REFUNDABLE AMOUNT FROM A PREVIOUS TICKET          REMAINS NON-REFUNDABLE FOLLOWING A CHANGE.          --------------------------------------------------          TICKET IS NOT TRANSFERABLE TO ANOTHER PERSON.          -------------------------------------------------          PARTIALLY USED TICKETS - REFUND THE DIFFERENCE -          IF ANY - BETWEEN THE FARE PAID AND THE FARE FOR          THE JOURNEY TRAVELLED.          ------ CANCELLATION REPRICING CONDITIONS-----          FLOWN COUPONS MUST BE REPRICED USING HISTORICAL          FARES IN EFFECT ON THE PREVIOUS TICKETING DATE          THE FARE FOR THE JOURNEY TRAVELLED MUST BE CAPPED          AT THE TOTAL FARE AMOUNT PLUS CARRIER IMPOSED          CHARGE PAID ON THE TICKET BEING PRESENTED FOR          REFUND          FULLY FLOWN FARE COMPONENTS MAY BE REPRICED USING          ANY BOOKING CODE WITHIN THE SAME CABIN PROVIDED          THE NEW FARE AMOUNT IS EQUAL OR HIGHER THAN          ORIGINAL          PARTIALLY FLOWN FARE COMPONENTS MUST BE REPRICED          USING THE SAME OR HIGHER BOOKING CODE.<br/><ul><li>GST, RAF AND ANY OTHER APPLICABLE CHARGES ARE EXTRA.</li><li>FEES ARE INDICATIVE PER PAX AND PER SECTOR.</li><li>FOR DOMESTIC BOOKINGS, PASSENGERS MUST SUBMIT THE CANCELLATION OR REISSUE REQUEST AT LEAST 2 HOURS BEFORE THE TIME LIMIT DEFINED IN THE AIRLINE's POLICY.</li><li>FOR INTERNATIONAL BOOKINGS, PASSENGERS MUST SUBMIT THE CANCELLATION OR REISSUE REQUEST AT LEAST 4 HOURS BEFORE THE TIME LIMIT DEFINED IN THE AIRLINE's POLICY.</li></ul>",
               "FareRestriction": null,
               "FareFamilyCode": "ECONFLEX"
             }

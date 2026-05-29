@@ -7,7 +7,7 @@
         "ErrorCode": 0,
         "ErrorMessage": ""
       },
-      "TraceId": "762321de-f8e1-42b3-8ebd-3f09e326dbf8",
+      "TraceId": "f3f8c472-41b7-40e4-8529-e03cabf5bdfd",
       "Origin": "DEL",
       "Destination": "LHR",
       "IsPriceChange": false,
@@ -23,7 +23,7 @@
             "IsHoldAllowedWithSSR": false,
             "IsHoldMandatoryWithSSR": false,
             "LastNameFormat": null,
-            "ResultIndex": "OB1[TBO]pFR0sfK/aZcIRbn4fxoMtncAYpq6y+1BIdco0RykFfMvfeTC/mgVUzdLnPT1llQ9QkTbOqpmymfnlUh9foEAER7dFJgQv00r88l6YI3lf4Csndn37vgEGX/67ye1H+qYu+AocfjNX8xr+sLb7VeUp2tDPefP7TIQSdoXlczVmq1GmWfF8cB0EeDdLE5nls1MiqAmH/OHiYSOdZMCm98ioqYBhohq3FPaTRAV1nh0hMCXNgPMQsr81w0rkFp6fukKygMmKdxAU8CyoaehBvgWS22JSFwkTVCYCrxfAYo5JrXfnCSe8u6N6ysKtT8X5Z+w29TeipRtXphyAsdFyoYH8fWnsl6gzQg1wWHloclsX4GGS5EZKIFk2w833LRbm2KvIKRX7YjXFPcMOzBORf/M4kNHBwAfA5TgAQVTY3E87y6RuUUnWZ7Ayw5g8vVrarmBwNxshX6grz3CXLxjizm7IaaOgr7gaSBepDiHq4BXB9B/VpulbC6xaO6GgFQzyu9kLBTb6jbreOnWnS/ndwh4DS/4gCFn4mrGnW+ZJXqpHieCFXXeAy6SF1b4JWG3nnxc2zIiw4gYr+1kOeXhBNFQ8Op3Wy9x/9q5LxSuLiyJQfJXRSTLf+YGycnT7K2dEJV9rsTxPeNBNciIKMF7NBOLE7+iaA3FS1105N2z62FshkmWGcl4p2LfIC9OT4CQpZUHcAfJpPcGuMGpIprh3LY9PE96L2xNlMKvf0rJjif6WgUew5dbuzwf8iykdT0+A2rrvm74uJ2SvB2c1lpxV8pjMD2MoupM0PMv/30Infe67qrbn0cd7v8HRYBISBqXEzDGSFjH0BCjlo4TFG19i/F6Tw==",
+            "ResultIndex": "OB1[TBO]Z2Lwt0MJUz3fud0v3BsV2ZNydiKg6ddKcnkAZ4YP0WEIJwEbEZ44FwvDgyXUsrkJ2Juu1Vq5LjWsIt7BjDjUb/p0jJf7NIzYB2wAdkmhzKR6h9m+Tpql5zCRbh17nPLwnDhuc8wZ/RR3fE+Rp8WcAzuAhH4Vjme3mVhPAUtedSMcWw5TFX7ZX3JeL0I2a6KIuiSNVViD1txlkYj/zWxgxDcHmbwTFWhRL6LZm8McpjlnF8qvP2CXxoMNuCaeC4y/rZzATydAi1pa3uToWF6KRVyWGxzsqHK8jxMuuzyykTilWm85MeWFdXL6sOQgbxGLjwKNN4y3jo6HBSgEx/6hthXVP3YhZ0DH9abFxhR5GU/J87bcF+wH+8IY71t9upOAabEjUoj8WMgpOFegjHF1yesBzxqxsfqJccTkL0I+2pPgh6DXUwx9zQ5FmsHwUuOmGMV2ZFkiVHv+OtjQomoiohJROkM1s6Pk1Kxgcb2rr//blTztuFhj6mEQuS0lMkPdK4kp3lu5BosZDVJWG3l883dKios8ZVFC0wvpHs1xmDCh9y4tzZikdSvwVX67gm4o4U2xjJHIyAZ7z7yAwsQ6Lbx7Jsgyk5niGercPJIQlCtpT+IkN9JSGNL+iMbyhorIthT5Lg8yFIy3AcJaB29bewAHPByG6uezFzD6yOgjvF63mUeW692Mi4+LQY0JVXVb0p670fnbyNRh1wSDnjBBf0++CnLS3pO+gFPBpih7xb69G/QtPqfO6PTdlBYwNSONIHp3J6J+SetSN3g7l6/aybkohmIq8Y6Mer3XvBWwXhZ0nRGQkhSmuXck58M4vOVFpm7CTijg2EpP00Jlgep3cA==",
             "Source": 4,
             "IsLCC": false,
             "IsRefundable": true,
@@ -43,15 +43,15 @@
               "ServiceFeeDisplayType": 0,
               "Currency": "INR",
               "BaseFare": 453180,
-              "Tax": 62072,
+              "Tax": 62150,
               "TaxBreakup": [
                 {
                   "key": "K3",
-                  "value": 24334
+                  "value": 24338
                 },
                 {
                   "key": "YQTax",
-                  "value": 33494
+                  "value": 33562
                 },
                 {
                   "key": "INTax",
@@ -59,10 +59,10 @@
                 },
                 {
                   "key": "OtherTaxes",
-                  "value": 2710
+                  "value": 2716
                 }
               ],
-              "YQTax": 33494,
+              "YQTax": 33562,
               "AdditionalTxnFeeOfrd": 0,
               "AdditionalTxnFeePub": 0,
               "PGCharge": 0,
@@ -86,11 +86,11 @@
                 }
               ],
               "Discount": 0,
-              "PublishedFare": 515252,
+              "PublishedFare": 515330,
               "CommissionEarned": 0,
               "PLBEarned": 0,
               "IncentiveEarned": 0,
-              "OfferedFare": 515252,
+              "OfferedFare": 515330,
               "TdsOnCommission": 0,
               "TdsOnPLB": 0,
               "TdsOnIncentive": 0,
@@ -113,17 +113,17 @@
                 "PassengerType": 1,
                 "PassengerCount": 2,
                 "BaseFare": 453180,
-                "Tax": 62072,
+                "Tax": 62150,
                 "TransactionFee": 0,
-                "YQTax": 33494,
+                "YQTax": 33562,
                 "TaxBreakUp": [
                   {
                     "key": "YQTax",
-                    "value": 33494
+                    "value": 33562
                   },
                   {
                     "key": "K3",
-                    "value": 24334
+                    "value": 24338
                   },
                   {
                     "key": "INTax",
@@ -131,7 +131,7 @@
                   },
                   {
                     "key": "OtherTaxes",
-                    "value": 2710
+                    "value": 2716
                   }
                 ],
                 "AdditionalTxnFeePub": 0,
@@ -197,7 +197,7 @@
                 }
               ]
             ],
-            "LastTicketDate": "28May26",
+            "LastTicketDate": "29May26",
             "TicketAdvisory": null,
             "FareRules": [
               {
